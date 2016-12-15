@@ -5,14 +5,23 @@
     "projectId": "ghome",
     "voiceName": "male_1"
   },
-  "actions": [
-    {
-      "initialTrigger": {
-        "intent": "assistant.intent.action.MAIN"
-      },
-      "httpExecution": {
-        "url": "https://google-action.herokuapp.com/"
-      }
+  "actions": [{
+    "initialTrigger": {
+      "intent": "assistant.intent.action.MAIN"
+    },
+    "httpExecution": {
+      "url": "https://google-action.herokuapp.com/"
     }
-  ]
+  }, {
+    "description": "Deep link",
+    "initialTrigger": {
+      "intent": "raw.input",
+      "queryPatterns": [{
+        "queryPattern": "find me $SchemaOrg_Number:number deals"
+      }]
+    },
+    "httpExecution": {
+      "url": "https://google-action.herokuapp.com/"
+    }
+  }]
 }

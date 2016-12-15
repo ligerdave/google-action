@@ -47,6 +47,12 @@ app.post('/', function(request, response) {
     if (assistant.getRawInput() === 'bye') {
       assistant.tell('Goodbye!');
     } else {
+
+      let dialogState = assistant.getDialogState();
+      console.log(JSON.stringify(dialogState));
+      let number = assistant.getArgument('number');
+      console.log('getting number: ' + number)
+
       let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
         assistant.getRawInput() + '</say-as></speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
       assistant.ask(inputPrompt);
@@ -55,6 +61,7 @@ app.post('/', function(request, response) {
 
   let actionMap = new Map();
   actionMap.set(assistant.StandardIntents.MAIN, mainIntent);
+  actionMap.set('raw.input', rawInput);
   actionMap.set(assistant.StandardIntents.TEXT, rawInput);
 
   assistant.handleRequest(actionMap);
