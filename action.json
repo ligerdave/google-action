@@ -15,7 +15,7 @@
   }, {
     "description": "Deep link",
     "initialTrigger": {
-      "intent": "raw.input",
+      "intent": "com.ligerdave.iot.googleaction.finddeals",
       "queryPatterns": [{
         "queryPattern": "find me $SchemaOrg_Number:number deals"
       }]
