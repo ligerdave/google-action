@@ -20,6 +20,7 @@ process.env.DEBUG = 'actions-on-google:*';
 let ActionsSdkAssistant = require('actions-on-google').ActionsSdkAssistant;
 let express = require('express');
 let bodyParser = require('body-parser');
+let _ = require('lodash');
 
 let app = express();
 app.set('port', (process.env.PORT || 8080));
@@ -49,13 +50,18 @@ app.post('/', function(request, response) {
     } else {
 
       let dialogState = assistant.getDialogState();
-      console.log(JSON.stringify(dialogState));
+      console.log('dialogState: ' + JSON.stringify(dialogState));
       let number = assistant.getArgument('number');
-      console.log('getting number: ' + number)
+      console.log('getting number: ' + number);
 
-      let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
-        assistant.getRawInput() + '</say-as></speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
-      assistant.ask(inputPrompt);
+
+      if (_.isEmpty(dialogState)) {
+        assistant.tell("Ok, let me find you " + number + " awesome deals!");
+      } else {
+        let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
+          assistant.getRawInput() + '</say-as></speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
+        assistant.ask(inputPrompt);
+      }
     }
   }
 
