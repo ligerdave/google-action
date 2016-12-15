@@ -27,14 +27,6 @@ app.use(bodyParser.json({
   type: 'application/json'
 }));
 
-
-app.get('/', function(request, response) {
-  response.setHeader('Content-Type', 'application/json');
-  response.send(JSON.stringify({
-    whoami: david fu
-  }, null, 3));
-});
-
 app.post('/', function(request, response) {
   console.log('handle post');
   const assistant = new ActionsSdkAssistant({
