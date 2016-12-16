@@ -94,12 +94,12 @@ app.post('/', function(request, response) {
       assistant.tell('Please have a look in your shopping cart. Goodbye!');
     } else {
 
-      let deals = assistant.getDialogState();
-      console.log('dialogState: ' + JSON.stringify(deals));
+      let dealsJson = assistant.getDialogState();
+      console.log('dialogState: ' + JSON.stringify(dealsJson));
 
-      if (deals.deals.length > 0) {
+      if (dealsJson.deals.length > 0) {
 
-        let message = generateMessages(deals);
+        let message = generateMessages(dealsJson);
 
         let response = assistant.getRawInput();
 
