@@ -17,9 +17,12 @@
     "initialTrigger": {
       "intent": "com.ligerdave.iot.googleaction.finddeals",
       "queryPatterns": [{
-        "queryPattern": "find me $SchemaOrg_Number:number deals",
-        "queryPattern": "find me some deals",
-        "queryPattern": "find me a few deals",
+        "queryPattern": "find me $SchemaOrg_Number:number deals"
+      }, {
+        "queryPattern": "find me some deals"
+      }, {
+        "queryPattern": "find me a few deals"
+      }, {
         "queryPattern": "find me a couple of deals"
       }]
     },

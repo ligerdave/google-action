@@ -21,6 +21,7 @@ let ActionsSdkAssistant = require('actions-on-google').ActionsSdkAssistant;
 let express = require('express');
 let bodyParser = require('body-parser');
 let _ = require('lodash');
+let fs = require('fs');
 
 let app = express();
 app.set('port', (process.env.PORT || 8080));
@@ -35,12 +36,29 @@ app.post('/', function(request, response) {
     response: response
   });
 
+  // this is a mock call. it should be calling a backend api providing deals
+
+  function getDeals(numberOfDeals) {
+    return JSON.parse(fs.readFileSync('deals.json', 'utf8'));
+  }
+
   function mainIntent(assistant) {
     console.log('mainIntent');
     let inputPrompt = assistant.buildInputPrompt(true, '<speak>Hi! This is David Fu <break time="1"/> ' +
       'I can read out an ordinal like ' +
       '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
     assistant.ask(inputPrompt);
+  }
+
+  function generateMessages(dealsJson) {
+
+    let message = "";
+    let deal = dealsJson.deals.pop();
+
+    if (deal.message) {
+      message = deal.message;
+    }
+    return message;
   }
 
   function findDealIntent(assistant) {
@@ -50,15 +68,34 @@ app.post('/', function(request, response) {
     let number = assistant.getArgument('number');
     console.log('getting number: ' + number);
 
-    assistant.tell("Ok, let me find you " + number + " awesome deals!");
+    // set default number of deals
+    if (_.isNull(number)) {
+      number = 3;
+    }
 
+    if (number > 5) {
+      assistant.tell("Hey pal, you are asking for too much!");
+    } else {
+      let dealsJson = getDeals(number);
+
+      let message = generateMessages(dealsJson);
+
+
+      let inputPrompt = assistant.buildInputPrompt(true, '<speak>Ok, here are some awesome deals! <break time="1"/> ' + message + ' <break time="1"/> Would you like to add it to your shopping cart?</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
+      assistant.ask(inputPrompt, dealsJson);
+
+
+    }
   }
 
   function rawInput(assistant) {
     console.log('rawInput');
     if (assistant.getRawInput() === 'bye') {
-      assistant.tell('Goodbye!');
+      assistant.tell('Please have a look in your shopping cart. Goodbye!');
     } else {
+
+      let response = assistant.getRawInput();
+
       let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
         assistant.getRawInput() + '</say-as></speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
       assistant.ask(inputPrompt);

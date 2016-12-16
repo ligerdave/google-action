@@ -1,0 +1,21 @@
+{
+  "deals": [{
+    "name": "Intel Corp. Core i7 5775C 1150 - BX80658I75775C",
+    "price": "$364.89",
+    "headline": "only a few left in stock",
+    "message": "Intel Corp. Core i7 5775C 1150 - BX80658I75775C"
+  }, {
+    "name": "Brawny Pick-a-Size Big Roll Paper Towels, 104 sheets, 6 rolls",
+    "price": "$6.47",
+    "incentive": "$0.50",
+    "lastTimePurchased": "1m",
+    "message": ""
+  }, {
+    "name": "Sunbeam Electric Heated Plush Blanket",
+    "price": "$37.47",
+    "incentive": "$5.50",
+    "nearBy": true,
+    "storeName": "walmart story road",
+    "message": "Sunbeam Electric Heated Plush Blanket"
+  }]
+}
