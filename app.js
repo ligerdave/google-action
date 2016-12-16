@@ -104,9 +104,9 @@ app.post('/', function(request, response) {
         let response = assistant.getRawInput();
 
         if (response === 'yes') {
-          assistant.tell('Okay, I have put it in your cart.');
+          message = 'Okay, I have put it in your cart. <break time="1"/>' + message;
         } else {
-          assistant.tell('Okay, let\'s try another one.');
+          message = 'Okay, let\'s try another one. <break time="1"/>' + message;
         }
 
         let inputPrompt = assistant.buildInputPrompt(true, '<speak>' + message + ' <break time="1"/> Would you like to add it to your shopping cart? Please answer yes or no.</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
