@@ -81,7 +81,7 @@ app.post('/', function(request, response) {
       let message = generateMessages(dealsJson);
 
 
-      let inputPrompt = assistant.buildInputPrompt(true, '<speak>Ok, here are some awesome deals! <break time="1"/> ' + message + ' <break time="1"/> Would you like to add it to your shopping cart?</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
+      let inputPrompt = assistant.buildInputPrompt(true, '<speak>Ok, here are some awesome deals! <break time="1"/> ' + message + ' <break time="1"/> Would you like to add it to your shopping cart? Please answer yes or no.</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
       assistant.ask(inputPrompt, dealsJson);
 
 
@@ -94,11 +94,26 @@ app.post('/', function(request, response) {
       assistant.tell('Please have a look in your shopping cart. Goodbye!');
     } else {
 
-      let response = assistant.getRawInput();
+      let deals = assistant.getDialogState();
+      console.log('dialogState: ' + JSON.stringify(deals));
 
-      let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
-        assistant.getRawInput() + '</say-as></speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
-      assistant.ask(inputPrompt);
+      if (deals.deals.length > 0) {
+
+        let message = generateMessages(deals);
+
+        let response = assistant.getRawInput();
+
+        if (response === 'yes') {
+          assistant.tell('Okay, I have put it in your cart.');
+        } else {
+          assistant.tell('Okay, let\'s try another one.');
+        }
+
+        let inputPrompt = assistant.buildInputPrompt(true, '<speak>' + message + ' <break time="1"/> Would you like to add it to your shopping cart? Please answer yes or no.</speak>', ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
+        assistant.ask(inputPrompt, dealsJson);
+      } else {
+        assistant.tell('Okay, I have no more deals to show. Sad! Please check your shopping cart to checkout! Thank you for shopping with us!');
+      }
 
     }
   }
